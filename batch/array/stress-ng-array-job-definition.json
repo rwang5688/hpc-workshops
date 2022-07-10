@@ -1,0 +1,13 @@
+{
+    "jobDefinitionName": "stress-ng-array-job-definition",
+    "type": "container",
+    "containerProperties": {
+        "image": "${ARRAY_REPO}",
+        "vcpus": 1,
+        "memory": 1024
+    },
+    "retryStrategy": { 
+        "attempts": 2
+    }
+}
+

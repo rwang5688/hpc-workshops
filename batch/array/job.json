@@ -1,0 +1,10 @@
+{
+    "jobName": "stress-ng-array",
+    "jobQueue": "stress-ng-queue",
+    "arrayProperties": {
+      "size": 8
+    },
+    "jobDefinition": "stress-ng-array-job-definition"
+  }
+
+  
