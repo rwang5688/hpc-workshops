@@ -1,0 +1,14 @@
+{
+    "jobName": "stress-ng-1",
+    "jobQueue": "stress-ng-queue",
+    "jobDefinition": "stress-ng-job-definition:1",
+    "containerOverrides": {
+        "environment": [
+            {
+                "name": "STRESS_ARGS",
+                "value": "--cpu 0 --cpu-method fft --timeout 1m --times"
+            }
+        ]
+    }
+}
+
