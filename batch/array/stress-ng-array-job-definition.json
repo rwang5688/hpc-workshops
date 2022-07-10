@@ -1,0 +1,12 @@
+{
+    "jobDefinitionName": "stress-ng-array-job-definition",
+    "type": "container",
+    "containerProperties": {
+        "image": "056558984126.dkr.ecr.us-west-2.amazonaws.com/stress-ng-array",
+        "vcpus": 1,
+        "memory": 1024
+    },
+    "retryStrategy": { 
+        "attempts": 2
+    }
+}
