@@ -1,3 +1,4 @@
 #!/bin/bash
-aws batch submit-job --cli-input-json file://stress-ng-array-job.json
+echo ${1}
+aws batch submit-job --cli-input-json file://${1}-job.json
 
