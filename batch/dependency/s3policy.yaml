@@ -1,0 +1,79 @@
+# Use as follow:
+#   aws cloudformation create-stack --stack-name 'BatchWorkshop' \
+#                                   --template-body file://s3policy.yaml \
+#                                   --capabilities "CAPABILITY_IAM"
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Create an S3 bucket and an ECS Task Role to access this bucket
+  in order to write configuration data, read command arguments and write output data.'
+
+Metadata:
+  'AWS::CloudFormation::Interface':
+    ParameterGroups:
+    - Label:
+        default: 'Parent Stacks'
+      Parameters:
+      - BucketName
+Parameters:
+    BucketName:
+      Description: 'Optional name of the bucket.'
+      Type: String
+      Default: ''
+Conditions:
+  HasBucketName: !Not [!Equals [!Ref BucketName, '']]
+
+Resources:
+  # Set up a Role for Batch job execution.
+  JobExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ecs-tasks.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+
+  # Set up an S3 Bucket, Policy and Role for tasks to read/write from/to the output bucket
+  Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !If [HasBucketName, !Ref BucketName, !Ref 'AWS::NoValue']
+      
+  # Set up a Policy that allows access to the S3 Bucket and attach it to the Role.
+  BucketPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: BucketPolicy
+      PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+          - Effect: Allow
+            Action:
+              - 's3:AbortMultipartUpload'
+              - 's3:GetBucketLocation'
+              - 's3:GetObject'
+              - 's3:ListBucket'
+              - 's3:ListBucketMultipartUploads'
+              - 's3:PutObject'
+            Resource:
+              - !Join [ "", [ "arn:aws:s3:::", !Ref 'Bucket' ] ]
+              - !Join [ "", [ "arn:aws:s3:::", !Ref 'Bucket' , "/*" ] ]
+
+      Roles:
+        - !Ref 'JobExecutionRole'       
+
+Outputs:
+  JobExecutionRole:
+    Description: ECS Task Execution Role for AWS Batch Jobs
+    Value: !Ref JobExecutionRole
+  Bucket:
+    Description: Bucket in which configuration and output will be written
+    Value: !Ref Bucket
+  BucketPolicy:
+    Description: ECS Task Policy for S3 access to S3 Bucket
+    Value: !Ref BucketPolicy
