@@ -1,0 +1,33 @@
+{
+    "computeEnvironmentName": "stress-ng-ce-spot",
+    "type": "MANAGED",
+    "state": "ENABLED",
+    "computeResources": {
+        "type": "SPOT",
+        "allocationStrategy": "SPOT_CAPACITY_OPTIMIZED",
+        "minvCpus": 0,
+        "maxvCpus": 256,
+        "desiredvCpus": 0,
+        "instanceTypes": [
+            "c5",
+            "m5",
+            "r5",
+            "optimal"
+        ],
+        "subnets": [
+            "${SUBNETS}"
+        ],
+        "securityGroupIds": [
+            "${SECURITY_GROUP}"
+        ],
+        "instanceRole": "ecsInstanceRole",
+        "tags": {
+            "Name": "stress-ng batch spot"
+        },
+        "bidPercentage": 100
+    },
+    "tags": {
+        "Name": "stress-ng batch spot"
+    }
+}
+
