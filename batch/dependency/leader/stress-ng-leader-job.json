@@ -1,0 +1,13 @@
+{
+    "jobName": "stress-ng-leader",
+    "jobQueue": "stress-ng-queue",
+    "jobDefinition": "stress-ng-leader-job-definition",
+    "containerOverrides": {
+        "environment": [
+        {
+            "name": "STRESS_BUCKET",
+            "value": "${STRESS_BUCKET}"
+        }]
+    }
+}
+
