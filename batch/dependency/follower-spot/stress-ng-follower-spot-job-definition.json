@@ -1,0 +1,23 @@
+{
+    "jobDefinitionName": "stress-ng-follower-spot-job-definition",
+    "type": "container",
+    "containerProperties": {
+        "image": "${FOLLOWER_REPO}",
+        "vcpus": 1,
+        "memory": 1024,
+        "jobRoleArn": "${EXECUTION_ROLE_ARN}",
+        "executionRoleArn": "${EXECUTION_ROLE_ARN}"
+    },
+    "retryStrategy": { 
+        "attempts": 5,
+        "evaluateOnExit": 
+        [{
+            "onStatusReason" :"Host EC2*",
+            "action": "RETRY"
+        },{
+            "onReason" : "*",
+            "action": "EXIT"
+        }]
+    }
+}
+
