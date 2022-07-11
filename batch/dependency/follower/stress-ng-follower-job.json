@@ -1,0 +1,16 @@
+{
+    "jobName": "stress-ng-follower",
+    "jobQueue": "stress-ng-queue",
+    "arrayProperties": {
+        "size": 2
+    },
+    "jobDefinition": "stress-ng-follower-job-definition",
+    "containerOverrides": {
+        "environment": [
+        {
+            "name": "STRESS_BUCKET",
+            "value": "${STRESS_BUCKET}"
+        }]
+    }
+}
+

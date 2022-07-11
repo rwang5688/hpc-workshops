@@ -2,7 +2,7 @@
     "jobDefinitionName": "stress-ng-array-job-definition",
     "type": "container",
     "containerProperties": {
-        "image": "${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com/stress-ng-array",
+        "image": "${ARRAY_REPO}",
         "vcpus": 1,
         "memory": 1024
     },
@@ -10,3 +10,4 @@
         "attempts": 2
     }
 }
+
