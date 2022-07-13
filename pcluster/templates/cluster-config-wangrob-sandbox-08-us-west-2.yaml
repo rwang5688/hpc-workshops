@@ -27,6 +27,7 @@ Scheduling:
       Networking:
         SubnetIds:
           - subnet-0ac3b527a915aac66
+          - subnet-05ae8c5b287342668
         PlacementGroup:
           Enabled: true
       Iam:
