@@ -3,7 +3,7 @@ HeadNode:
   Ssh:
     KeyName: wangrob-sandbox-08-ec2-us-east-2
   Networking:
-    SubnetId: subnet-096a35f805978349e
+    SubnetId: subnet-0fd7575af426956ad
   LocalStorage:
     RootVolume:
       Size: 40
@@ -26,7 +26,6 @@ Scheduling:
             Enabled: true
       Networking:
         SubnetIds:
-          - subnet-096a35f805978349e
           - subnet-0fd7575af426956ad
         PlacementGroup:
           Enabled: true
