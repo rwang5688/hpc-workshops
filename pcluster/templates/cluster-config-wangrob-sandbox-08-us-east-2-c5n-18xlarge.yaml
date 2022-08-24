@@ -18,7 +18,7 @@ Scheduling:
   SlurmQueues:
     - Name: compute
       ComputeResources:
-        - Name: hpc6a
+        - Name: c5n
           MinCount: 0
           MaxCount: 64
           InstanceType: c5n.18xlarge
