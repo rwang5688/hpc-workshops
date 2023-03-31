@@ -6,13 +6,15 @@ HeadNode:
     SubnetId: subnet-1234567
   LocalStorage:
     RootVolume:
-      Size: 40
+      Size: 50
   Iam:
     AdditionalIamPolicies:
       - Policy: arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
       - Policy: arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
   Dcv:
     Enabled: true
+  Imds:
+    ImdsSupport: v2.0
 Scheduling:
   Scheduler: slurm
   SlurmQueues:
@@ -23,6 +25,7 @@ Scheduling:
           MaxCount: 64
           Instances:
             - InstanceType: c6i.32xlarge
+          DisableSimultaneousMultithreading: true
           Efa:
             Enabled: true
       Networking:
@@ -30,6 +33,10 @@ Scheduling:
           - subnet-1234567
         PlacementGroup:
           Enabled: true
+      ComputeSettings:
+        LocalStorage:
+          RootVolume:
+            Size: 50
       Iam:
         AdditionalIamPolicies:
           - Policy: arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
