@@ -11,6 +11,7 @@ HeadNode:
     AdditionalIamPolicies:
       - Policy: arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
       - Policy: arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+      - Policy: arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
   Dcv:
     Enabled: true
   Imds:
@@ -20,7 +21,7 @@ Scheduling:
   SlurmQueues:
     - Name: compute
       ComputeResources:
-        - Name: hpc6a
+        - Name: compute-hpc6a48xlarge
           MinCount: 0
           MaxCount: 64
           Instances:
@@ -40,6 +41,32 @@ Scheduling:
       Iam:
         AdditionalIamPolicies:
           - Policy: arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+    - Name: queue1
+      ComputeResources:
+        - Name: queue1-c6ixlarge
+          MinCount: 0
+          MaxCount: 8
+          Instances:
+            - InstanceType: c6i.xlarge
+          DisableSimultaneousMultithreading: true
+          Efa:
+            Enabled: true
+      Networking:
+        SubnetIds:
+          - subnet-123456789
+        PlacementGroup:
+          Enabled: true
+      CustomActions:
+        OnNodeConfigured:
+          Script: >-
+            https://github.com/aws-samples/aws-hpc-tutorials/blob/isc22/static/scripts/post-install/container-install.sh
+      ComputeSettings:
+        LocalStorage:
+          RootVolume:
+            Size: 50
+      Iam:
+        AdditionalIamPolicies:
+          - Policy: arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
 Region: us-east-2
 Image:
   Os: alinux2
