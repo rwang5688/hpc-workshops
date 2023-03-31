@@ -14,7 +14,7 @@ HeadNode:
   Dcv:
     Enabled: true
   Imds:
-    ImdsSupport: v2.0
+    Secured: true
 Scheduling:
   Scheduler: slurm
   SlurmQueues:
@@ -43,3 +43,11 @@ Scheduling:
 Region: us-east-2
 Image:
   Os: alinux2
+SharedStorage:
+  - Name: Ebs0
+    StorageType: Ebs
+    MountDir: /shared
+    EbsSettings:
+      VolumeType: gp3
+      DeletionPolicy: Delete
+      Size: 50
