@@ -10,12 +10,16 @@ HeadNode:
   Iam:
     AdditionalIamPolicies:
       - Policy: arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
-      - Policy: arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+      - Policy: arn:aws:iam::aws:policy/AmazonS3FullAccess
       - Policy: arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
   Dcv:
     Enabled: true
   Imds:
     Secured: true
+  CustomActions:
+    OnNodeConfigured:
+      Script: >-
+        https://github.com/aws-samples/aws-hpc-tutorials/blob/isc22/static/scripts/post-install/container-install.sh
 Scheduling:
   Scheduler: slurm
   SlurmQueues:
@@ -40,7 +44,7 @@ Scheduling:
             Size: 50
       Iam:
         AdditionalIamPolicies:
-          - Policy: arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+          - Policy: arn:aws:iam::aws:policy/AmazonS3FullAccess
     - Name: queue1
       ComputeResources:
         - Name: queue1-c6ixlarge
@@ -50,23 +54,24 @@ Scheduling:
             - InstanceType: c6i.xlarge
           DisableSimultaneousMultithreading: true
           Efa:
-            Enabled: true
+            Enabled: false
       Networking:
         SubnetIds:
           - subnet-123456789
         PlacementGroup:
           Enabled: true
-      CustomActions:
-        OnNodeConfigured:
-          Script: >-
-            https://github.com/aws-samples/aws-hpc-tutorials/blob/isc22/static/scripts/post-install/container-install.sh
       ComputeSettings:
         LocalStorage:
           RootVolume:
             Size: 50
       Iam:
         AdditionalIamPolicies:
+          - Policy: arn:aws:iam::aws:policy/AmazonS3FullAccess
           - Policy: arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
+      CustomActions:
+        OnNodeConfigured:
+          Script: >-
+            https://github.com/aws-samples/aws-hpc-tutorials/blob/isc22/static/scripts/post-install/container-install.sh
 Region: us-east-2
 Image:
   Os: alinux2
