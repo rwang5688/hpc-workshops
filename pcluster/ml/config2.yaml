@@ -1,0 +1,30 @@
+Region: us-west-2
+Image:
+  Os: alinux2
+SharedStorage:
+  - MountDir: /shared
+    Name: default-ebs
+    StorageType: Ebs
+HeadNode:
+  InstanceType: c6i.xlarge
+  Networking:
+    SubnetId: ${public-subnet-id}
+    ElasticIp: false
+  Ssh:
+    KeyName: lab-your-key
+Scheduling:
+  Scheduler: slurm
+  SlurmQueues:
+    - Name: compute
+      CapacityType: ONDEMAND
+      ComputeResources:
+        - Name: compute
+          InstanceType: c6i.xlarge
+          MinCount: 0
+          MaxCount: 8
+          DisableSimultaneousMultithreading: true
+      Networking:
+        SubnetIds:
+          - ${private-subnet-id}
+        PlacementGroup:
+          Enabled: true

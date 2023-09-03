@@ -1,0 +1,49 @@
+Region: us-west-2
+Image:
+  Os: alinux2
+SharedStorage:
+  - MountDir: /shared
+    Name: default-ebs
+    StorageType: Ebs
+
+  - Name: fsxshared
+    StorageType: FsxLustre
+    MountDir: /lustre
+    FsxLustreSettings:
+      StorageCapacity: 1200
+      ImportPath: s3://${mlbucket-name}
+      DeploymentType: SCRATCH_2
+
+HeadNode:
+  InstanceType: c6in.2xlarge
+  Networking:
+    SubnetId: ${public-subnet-id}
+  Ssh:
+    KeyName: lab-your-key
+  Dcv:
+    Enabled: true
+
+Scheduling:
+  Scheduler: slurm
+  SlurmQueues:
+    - Name: compute
+      ComputeResources:
+      - Name: p3dn24xlarge
+        InstanceType: p3dn.24xlarge
+        MinCount: 0
+        MaxCount: 2
+        DisableSimultaneousMultithreading: true
+        Efa:
+          Enabled: true
+      CapacityType: SPOT
+      CustomActions:
+        OnNodeConfigured:
+          Script: s3://${mlbucket-name}/post-install.sh
+      Iam:
+        S3Access:
+          - BucketName: ${mlbucket-name}
+      Networking:
+        SubnetIds:
+          - ${private-subnet-id}
+        PlacementGroup:
+          Enabled: true
