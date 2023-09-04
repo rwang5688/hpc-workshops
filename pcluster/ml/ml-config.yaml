@@ -28,14 +28,14 @@ Scheduling:
   SlurmQueues:
     - Name: compute
       ComputeResources:
-      - Name: p3dn24xlarge
-        InstanceType: p3dn.24xlarge
+      - Name: p3-16xlarge
+        InstanceType: p3.16xlarge
         MinCount: 0
         MaxCount: 2
         DisableSimultaneousMultithreading: true
         Efa:
-          Enabled: true
-      CapacityType: SPOT
+          Enabled: false
+      CapacityType: ONDEMAND
       CustomActions:
         OnNodeConfigured:
           Script: s3://${mlbucket-name}/post-install.sh
