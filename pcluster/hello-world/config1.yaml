@@ -1,10 +1,10 @@
-Region: us-west-2
+Region: eu-west-1
 Image:
   Os: alinux2
 HeadNode:
-  InstanceType: c6i.xlarge
+  InstanceType: c5.xlarge
   Networking:
-    SubnetId: ${public-subnet-id}
+    SubnetId: subnet-xxxxxxxxxxx
   Ssh:
     KeyName: lab-your-key
 Scheduling:
@@ -12,11 +12,11 @@ Scheduling:
   SlurmQueues:
   - Name: compute
     ComputeResources:
-    - Name: c6ixlarge
-      Instances:
-      - InstanceType: c6i.xlarge
+    - Name: c5xlarge
+      InstanceType: c5.xlarge
       MinCount: 0
       MaxCount: 8
     Networking:
       SubnetIds:
-      - ${private-subnet-id}
+      - subnet-yyyyyyyyyy
+

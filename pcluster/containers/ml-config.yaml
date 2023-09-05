@@ -1,4 +1,4 @@
-Region: us-west-2
+Region: ${AWS_REGION}
 Image:
   Os: alinux2
 SharedStorage:
@@ -11,15 +11,15 @@ SharedStorage:
     MountDir: /lustre
     FsxLustreSettings:
       StorageCapacity: 1200
-      ImportPath: s3://${mlbucket-name}
+      ImportPath: s3://mlbucket-${BUCKET_POSTFIX}
       DeploymentType: SCRATCH_2
 
 HeadNode:
-  InstanceType: c6in.2xlarge
+  InstanceType: c5n.2xlarge
   Networking:
-    SubnetId: ${public-subnet-id}
+    SubnetId: ${SUBNET_ID}
   Ssh:
-    KeyName: lab-your-key
+    KeyName: ${AWS_KEYPAIR}
   Dcv:
     Enabled: true
 
@@ -38,12 +38,12 @@ Scheduling:
       CapacityType: ONDEMAND
       CustomActions:
         OnNodeConfigured:
-          Script: s3://${mlbucket-name}/post-install.sh
+          Script: s3://mlbucket-${BUCKET_POSTFIX}/post-install.sh
       Iam:
         S3Access:
-          - BucketName: ${mlbucket-name}
+          - BucketName: mlbucket-${BUCKET_POSTFIX}
       Networking:
         SubnetIds:
-          - ${private-subnet-id}
+          - ${SUBNET_ID}
         PlacementGroup:
           Enabled: true
