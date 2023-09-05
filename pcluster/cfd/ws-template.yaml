@@ -1,0 +1,53 @@
+HeadNode:
+  InstanceType: c6i.xlarge
+  Networking:
+    SubnetId: subnet-03bcdd367f58e0dc0
+  LocalStorage:
+    RootVolume:
+      VolumeType: gp3
+  Iam:
+    AdditionalIamPolicies:
+      - Policy: arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+  Dcv:
+    Enabled: true
+  Iam:
+    S3Access:
+      - EnableWriteAccess: true
+        BucketName: '*'
+Scheduling:
+  Scheduler: slurm
+  SlurmQueues:
+    - Name: compute
+      AllocationStrategy: lowest-price
+      ComputeResources:
+        - Name: compute
+          Instances:
+            - InstanceType: c6i.12xlarge
+          MinCount: 0
+          MaxCount: 4
+          Efa:
+            Enabled: false
+            GdrSupport: false
+      Networking:
+        SubnetIds:
+          - subnet-03bcdd367f58e0dc0
+        PlacementGroup:
+          Enabled: true
+      ComputeSettings:
+        LocalStorage:
+          RootVolume:
+            VolumeType: gp3
+Region: us-east-2
+Imds:
+  ImdsSupport: v2.0
+Image:
+  Os: alinux2
+SharedStorage:
+  - Name: FsxLustre0
+    StorageType: FsxLustre
+    MountDir: /fsx
+    FsxLustreSettings:
+      StorageCapacity: 1200
+      PerUnitStorageThroughput: 125
+      DeploymentType: PERSISTENT_2
+      DataCompressionType: LZ4

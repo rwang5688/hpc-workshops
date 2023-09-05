@@ -1,0 +1,69 @@
+Region: eu-west-1
+Image:
+  Os: alinux2
+SharedStorage:
+  - MountDir: /shared
+    Name: default-ebs
+    StorageType: Ebs
+  - Name: fsxshared
+    StorageType: FsxLustre
+    MountDir: /fsx
+    FsxLustreSettings:
+      StorageCapacity: 1200
+      DeploymentType: PERSISTENT_1
+      StorageType: SSD
+      AutomaticBackupRetentionDays: 30
+      DailyAutomaticBackupStartTime: 00:00
+      PerUnitStorageThroughput: 100
+HeadNode:
+  InstanceType: m6g.large
+  Networking:
+    SubnetId: subnet-xxxxxxxxxxx
+    ElasticIp: false
+  Ssh:
+    KeyName: cfd_ireland
+  Dcv:
+    Enabled: true
+  Iam:
+    S3Access:
+      - EnableWriteAccess: true
+        BucketName: '*'
+Scheduling:
+  Scheduler: slurm
+  SlurmQueues:
+    - Name: compute
+      CapacityType: ONDEMAND
+      ComputeResources:
+        - Name: defaultcompute
+          InstanceType: c6gn.16xlarge
+          MinCount: 0
+          MaxCount: 10
+          Efa:
+            Enabled: true
+      Iam:
+        S3Access:
+          - EnableWriteAccess: true
+            BucketName: '*'
+      Networking:
+        SubnetIds:
+          - subnet-yyyyyyyyyy
+        PlacementGroup:
+          Enabled: true
+    - Name: mesh
+      CapacityType: ONDEMAND
+      ComputeResources:
+        - Name: defaultmesh
+          InstanceType: r6g.16xlarge
+          MinCount: 0
+          MaxCount: 10
+          Efa:
+            Enabled: false
+      Iam:
+        S3Access:
+          - EnableWriteAccess: true
+            BucketName: '*'
+      Networking:
+        SubnetIds:
+          - subnet-yyyyyyyyyy
+        PlacementGroup:
+          Enabled: true
