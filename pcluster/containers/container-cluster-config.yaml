@@ -46,7 +46,7 @@ Scheduling:
           - Policy: arn:aws:iam::aws:policy/AmazonS3FullAccess
 Region: ${AWS_REGION}
 Image:
-  Os: alinux2
+  Os: ubuntu2204
 #  CustomAmi: ${CUSTOM_AMI}
 SharedStorage:
   - Name: Ebs0
