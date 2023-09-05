@@ -1,4 +1,4 @@
-Region: us-west-2
+Region: ${AWS_REGION}
 Image:
   Os: alinux2
 SharedStorage:
@@ -6,9 +6,9 @@ SharedStorage:
     Name: default-ebs
     StorageType: Ebs
 HeadNode:
-  InstanceType: c6i.xlarge
+  InstanceType: c5.xlarge
   Networking:
-    SubnetId: ${public-subnet-id}
+    SubnetId: ${SUBNET_ID}
     ElasticIp: false
   Ssh:
     KeyName: lab-your-key
@@ -19,12 +19,12 @@ Scheduling:
       CapacityType: ONDEMAND
       ComputeResources:
         - Name: compute
-          InstanceType: c6i.xlarge
+          InstanceType: c5.xlarge
           MinCount: 0
           MaxCount: 8
           DisableSimultaneousMultithreading: true
       Networking:
         SubnetIds:
-          - ${private-subnet-id}
+          - ${SUBNET_ID}
         PlacementGroup:
           Enabled: true
