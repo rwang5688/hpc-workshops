@@ -7,11 +7,13 @@ HeadNode:
   LocalStorage:
     RootVolume:
       Size: 50
+  Dcv:
+    Enabled: true
   Iam:
     AdditionalIamPolicies:
       - Policy: arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
-  Dcv:
-    Enabled: true
+      - Policy: arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
+      - Policy: arn:aws:iam::aws:policy/AmazonS3FullAccess
   Imds:
     Secured: true
 Scheduling:
@@ -35,15 +37,30 @@ Scheduling:
         LocalStorage:
           RootVolume:
             Size: 50
+      CustomActions:
+        OnNodeConfigured:
+          Script: s3://hpc-${AWS_ACCOUNT}-${AWS_REGION}/container-install.sh
+      Iam:
+        AdditionalIamPolicies:
+          - Policy: arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
+          - Policy: arn:aws:iam::aws:policy/AmazonS3FullAccess
 Region: ${AWS_REGION}
 Image:
   Os: alinux2
-  CustomAmi: ${CUSTOM_AMI}
+#  CustomAmi: ${CUSTOM_AMI}
 SharedStorage:
   - Name: Ebs0
     StorageType: Ebs
     MountDir: /shared
     EbsSettings:
       VolumeType: gp2
-      DeletionPolicy: Delete
       Size: '50'
+      DeletionPolicy: Delete
+  - Name: Fsx0
+    StorageType: FsxLustre
+    MountDir: /lustre
+    FsxLustreSettings:
+      StorageCapacity: 1200
+      ImportPath: s3://hpc-${AWS_ACCOUNT}-${AWS_REGION}
+      DeploymentType: SCRATCH_2
+      DeletionPolicy: Delete
