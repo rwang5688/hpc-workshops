@@ -28,8 +28,35 @@ sudo usermod -a -G docker ubuntu
 sudo systemctl start docker
 sudo systemctl enable docker
 
-# https://docs.sylabs.io/guides/3.0/user-guide/installation.html#download-and-install-singularity-from-a-release
+# https://docs.sylabs.io/guides/3.0/user-guide/installation.html#install-on-linux
 
-# Download Singularity from a release
+# Install dependencies
+sudo apt-get update && sudo apt-get install -y \
+    build-essential \
+    libssl-dev \
+    uuid-dev \
+    libgpgme11-dev \
+    squashfs-tools \
+    libseccomp-dev \
+    pkg-config
 
-sudo yum install -y singularity
+# Install Go
+export VERSION=1.11 OS=linux ARCH=amd64 && \
+    wget https://dl.google.com/go/go$VERSION.$OS-$ARCH.tar.gz && \
+    sudo tar -C /usr/local -xzvf go$VERSION.$OS-$ARCH.tar.gz && \
+    rm go$VERSION.$OS-$ARCH.tar.gz
+
+echo 'export GOPATH=${HOME}/go' >> ~/.bashrc && \
+    echo 'export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin' >> ~/.bashrc && \
+    source ~/.bashrc
+
+go get -u github.com/golang/dep/cmd/dep    
+
+# Download and install Singularity from a release
+export VERSION=3.11.4 && # adjust this as necessary \
+    mkdir -p $GOPATH/src/github.com/sylabs && \
+    cd $GOPATH/src/github.com/sylabs && \
+    wget https://github.com/sylabs/singularity/releases/download/v${VERSION}/singularity-${VERSION}.tar.gz && \
+    tar -xzf singularity-${VERSION}.tar.gz && \
+    cd ./singularity && \
+    ./mconfig
