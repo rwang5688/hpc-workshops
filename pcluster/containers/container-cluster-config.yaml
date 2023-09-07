@@ -61,6 +61,6 @@ SharedStorage:
     MountDir: /lustre
     FsxLustreSettings:
       StorageCapacity: 1200
-      ImportPath: s3://hpc-${AWS_ACCOUNT}-${AWS_REGION}
+      ImportPath: s3://hpc-${AWS_ACCOUNT}-${AWS_REGION}-${USER_NAME}
       DeploymentType: SCRATCH_2
       DeletionPolicy: Delete
