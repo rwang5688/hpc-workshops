@@ -39,7 +39,7 @@ Scheduling:
             Size: 50
       CustomActions:
         OnNodeConfigured:
-          Script: s3://hpc-${AWS_ACCOUNT}-${AWS_REGION}/container-install.sh
+          Script: s3://hpc-${AWS_ACCOUNT}-${AWS_REGION}-${USER_NAME}/container-install.sh
       Iam:
         AdditionalIamPolicies:
           - Policy: arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
