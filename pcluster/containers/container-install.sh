@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Install Docker
+# Install Docker and add user "ubuntu" to group "docker"
 sudo apt-get update && sudo apt-get install -y docker.io
-sudo usermod -a -G docker ubuntu
+newgrp docker
 sudo systemctl start docker
 sudo systemctl enable docker
 
