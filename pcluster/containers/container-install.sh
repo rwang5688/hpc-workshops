@@ -1,5 +1,7 @@
-# Install Docker and add user "ubuntu" to group "docker"
+# Ensure repositories are up-to-date
 sudo apt-get update
+
+# Install Docker and add user "ubuntu" to group "docker"
 sudo apt-get install -y docker.io
 sudo usermod -a -G docker ubuntu
 sudo systemctl start docker
@@ -7,8 +9,6 @@ sudo systemctl enable docker
 
 # Install Singularity
 # https://docs.sylabs.io/guides/main/admin-guide/installation.html#id1
-# Ensure repositories are up-to-date
-sudo apt-get update
 # Install debian packages for dependencies
 sudo apt-get install -y \
    build-essential \
@@ -18,19 +18,7 @@ sudo apt-get install -y \
    squashfs-tools \
    cryptsetup \
    runc
-    
-# https://github.com/containers/conmon
-# [wangrob]: do below ONLY if Singularity fails to compile due to missing headers for conmon
-sudo apt-get install -y \
-    gcc \
-    git \
-    libc6-dev \
-    libglib2.0-dev \
-    libseccomp-dev \
-    pkg-config \
-    make \
-    runc
-
+   
 export VERSION=1.21.1 OS=linux ARCH=amd64 && \
   wget https://dl.google.com/go/go$VERSION.$OS-$ARCH.tar.gz && \
   sudo tar -C /usr/local -xzvf go$VERSION.$OS-$ARCH.tar.gz && \
@@ -54,6 +42,7 @@ git clone --recurse-submodules https://github.com/sylabs/singularity.git && \
     sudo make -C builddir install
 
 # Install AWS CLI v2
+cd
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 sudo ./aws/install
