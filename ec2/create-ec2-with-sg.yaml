@@ -1,0 +1,156 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >-
+  AWS CloudFormation Sample Template EC2InstanceWithSecurityGroupSample: Create
+  an Amazon EC2 instance running the Amazon Linux AMI. The AMI is chosen based
+  on the region in which the stack is run. This example creates an EC2 security
+  group for the instance to give you SSH access. **WARNING** This template
+  creates an Amazon EC2 instance. You will be billed for the AWS resources used
+  if you create a stack from this template.
+
+Parameters:
+  AmiId:
+    Description: AMI Id of the latest Amazon Linux image in the launching region
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    ConstraintDescription: AMI Id of the latest Amazon Linux image in the launching region
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+
+  InstanceType:
+    Description: WebServer EC2 instance type
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.nano
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - t2.large
+      - t2.xlarge
+      - t2.2xlarge
+      - t3.nano
+      - t3.micro
+      - t3.small
+      - t3.medium
+      - t3.large
+      - t3.xlarge
+      - t3.2xlarge
+      - g4dn.xlarge
+      - g4dn.2xlarge
+      - g4dn.4xlarge
+      - g4dn.8xlarge
+      - g4dn.12xlarge
+      - g4dn.16xlarge
+      - g4dn.metal
+      - p3.2xlarge
+      - p3.8xlarge
+      - p3.16xlarge
+      - p3dn.24xlarge
+      - p4d.24xlarge
+    ConstraintDescription: must be a valid EC2 instance type.
+
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: must be the name of an existing EC2 KeyPair.
+
+  SshCidr:
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+    Description: Please enter the IP range (CIDR notation) for SSH access
+    Default: 172.16.0.0/24
+    Type: String
+
+  SubnetId:
+    Description: The Subnet that hosts the EC2 instance
+    Type: AWS::EC2::Subnet::Id
+    ConstraintDescription: must select a Subnet.
+
+  VpcId:
+    Description: The VPC that hosts the EC2 instance
+    Type: AWS::EC2::VPC::Id
+    ConstraintDescription: must select a VPC.
+
+Resources:
+  EC2InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2008-10-17'
+        Statement:
+        - Sid: ''
+          Effect: Allow
+          Principal:
+            Service: ec2.amazonaws.com
+          Action: sts:AssumeRole
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM
+      - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+      - arn:aws:iam::aws:policy/AmazonS3FullAccess
+
+  EC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+      - Ref: EC2InstanceRole
+
+  EC2Instance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      IamInstanceProfile:
+        Ref: EC2InstanceProfile
+      ImageId:
+        Ref: AmiId
+      InstanceType:
+        Ref: InstanceType
+      KeyName:
+        Ref: KeyName
+      SecurityGroupIds:
+        - Fn::GetAtt: [ InstanceSecurityGroup, GroupId ]
+      SubnetId:
+        Ref: SubnetId
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          # Print out timestamp
+          cd /home/ec2-user/
+          whoami > logs.txt
+          date >> logs.txt
+          echo "Start installing software on ${InstanceType}." >> logs.txt
+          # install CloudWatch monitoring scripts
+          yum install -y perl-Switch perl-DateTime perl-Sys-Syslog perl-LWP-Protocol-https perl-Digest-SHA.x86_64
+          curl https://aws-cloudwatch.s3.amazonaws.com/downloads/CloudWatchMonitoringScripts-1.2.2.zip -O
+          unzip CloudWatchMonitoringScripts-1.2.2.zip
+          rm -rf CloudWatchMonitoringScripts-1.2.2.zip
+          # Print out timestamp
+          cd /home/ec2-user/
+          date >> logs.txt
+          echo "Downloaded CloudWatch monitoring scripts." >> logs.txt
+
+  InstanceSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Enable SSH access via port 22
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp:
+            Ref: SshCidr
+      VpcId:
+        Ref: VpcId
+
+Outputs:
+  AZ:
+    Description: Availability Zone of the newly created EC2 instance
+    Value:
+      'Fn::GetAtt':
+        - EC2Instance
+        - AvailabilityZone
+
+  InstanceId:
+    Description: InstanceId of the newly created EC2 instance
+    Value:
+      Ref: EC2Instance
+
+  SSMSessionManagerUrl:
+    Description: SSM Session Manager Url for the EC2 instance
+    Value: !Sub 'https://${AWS::Region}.console.aws.amazon.com/systems-manager/session-manager/${EC2Instance}?region=${AWS::Region}'
