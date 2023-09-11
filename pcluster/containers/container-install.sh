@@ -1,5 +1,5 @@
 # Ensure repositories are up-to-date
-sudo apt-get update
+sudo apt-get update -y
 
 # Install Docker and add user "ubuntu" to group "docker"
 sudo apt-get install -y docker.io
@@ -8,16 +8,26 @@ sudo systemctl start docker
 sudo systemctl enable docker
 
 # Install Singularity
-# https://docs.sylabs.io/guides/main/admin-guide/installation.html#id1
-# Install debian packages for dependencies
+# https://docs.sylabs.io/guides/3.0/user-guide/installation.html#install-dependencies
 sudo apt-get install -y \
-   build-essential \
-   libseccomp-dev \
-   libglib2.0-dev \
-   pkg-config \
-   squashfs-tools \
-   cryptsetup \
-   runc
+    build-essential \
+    libssl-dev \
+    uuid-dev \
+    libgpgme11-dev \
+    squashfs-tools \
+    libseccomp-dev \
+    pkg-config
+    
+# https://github.com/containers/conmon dependencies
+sudo apt-get install -y \
+  gcc \
+  git \
+  libc6-dev \
+  libglib2.0-dev \
+  libseccomp-dev \
+  pkg-config \
+  make \
+  runc
    
 export VERSION=1.21.1 OS=linux ARCH=amd64 && \
   wget https://dl.google.com/go/go$VERSION.$OS-$ARCH.tar.gz && \
