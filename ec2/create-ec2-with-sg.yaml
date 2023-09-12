@@ -90,40 +90,41 @@ Resources:
     Type: AWS::IAM::InstanceProfile
     Properties:
       Roles:
-      - Ref: EC2InstanceRole
+      - !Ref EC2InstanceRole
 
   EC2Instance:
     Type: 'AWS::EC2::Instance'
     Properties:
       IamInstanceProfile:
-        Ref: EC2InstanceProfile
+        !Ref EC2InstanceProfile
       ImageId:
-        Ref: AmiId
+        !Ref AmiId
       InstanceType:
-        Ref: InstanceType
+        !Ref InstanceType
       KeyName:
-        Ref: KeyName
+        !Ref KeyName
       SecurityGroupIds:
-        - Fn::GetAtt: [ InstanceSecurityGroup, GroupId ]
+        - !GetAtt [ InstanceSecurityGroup, GroupId ]
       SubnetId:
-        Ref: SubnetId
+        !Ref SubnetId
       UserData:
-        Fn::Base64: !Sub |
-          #!/bin/bash
-          # Print out timestamp
-          cd /home/ec2-user/
-          whoami > logs.txt
-          date >> logs.txt
-          echo "Start installing software on ${InstanceType}." >> logs.txt
-          # install CloudWatch monitoring scripts
-          yum install -y perl-Switch perl-DateTime perl-Sys-Syslog perl-LWP-Protocol-https perl-Digest-SHA.x86_64
-          curl https://aws-cloudwatch.s3.amazonaws.com/downloads/CloudWatchMonitoringScripts-1.2.2.zip -O
-          unzip CloudWatchMonitoringScripts-1.2.2.zip
-          rm -rf CloudWatchMonitoringScripts-1.2.2.zip
-          # Print out timestamp
-          cd /home/ec2-user/
-          date >> logs.txt
-          echo "Downloaded CloudWatch monitoring scripts." >> logs.txt
+        Fn::Base64: 
+          !Sub |
+            #!/bin/bash
+            # Print out timestamp
+            cd /home/ec2-user/
+            whoami > logs.txt
+            date >> logs.txt
+            echo "Start installing software on ${InstanceType}." >> logs.txt
+            # install CloudWatch monitoring scripts
+            yum install -y perl-Switch perl-DateTime perl-Sys-Syslog perl-LWP-Protocol-https perl-Digest-SHA.x86_64
+            curl https://aws-cloudwatch.s3.amazonaws.com/downloads/CloudWatchMonitoringScripts-1.2.2.zip -O
+            unzip CloudWatchMonitoringScripts-1.2.2.zip
+            rm -rf CloudWatchMonitoringScripts-1.2.2.zip
+            # Print out timestamp
+            cd /home/ec2-user/
+            date >> logs.txt
+            echo "Downloaded CloudWatch monitoring scripts." >> logs.txt
 
   InstanceSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
@@ -134,9 +135,9 @@ Resources:
           FromPort: 22
           ToPort: 22
           CidrIp:
-            Ref: SshCidr
+            !Ref SshCidr
       VpcId:
-        Ref: VpcId
+        !Ref VpcId
 
 Outputs:
   AZ:
