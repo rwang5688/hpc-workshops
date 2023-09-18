@@ -5,12 +5,13 @@ HeadNode:
   LocalStorage:
     RootVolume:
       VolumeType: gp3
-  Iam:
-    AdditionalIamPolicies:
-      - Policy: arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+  Ssh:
+    KeyName: cfd_ireland
   Dcv:
     Enabled: true
   Iam:
+    AdditionalIamPolicies:
+      - Policy: arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
     S3Access:
       - EnableWriteAccess: true
         BucketName: '*'
