@@ -1,5 +1,5 @@
 HeadNode:
-  InstanceType: c6i.xlarge
+  InstanceType: m6i.large
   Networking:
     SubnetId: subnet-03bcdd367f58e0dc0
   LocalStorage:
@@ -23,7 +23,7 @@ Scheduling:
       ComputeResources:
         - Name: compute
           Instances:
-            - InstanceType: c6i.12xlarge
+            - InstanceType: c6i.16xlarge
           MinCount: 0
           MaxCount: 4
           Efa:
