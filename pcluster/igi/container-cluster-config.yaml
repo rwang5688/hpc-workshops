@@ -1,12 +1,13 @@
 HeadNode:
-  InstanceType: m5.2xlarge
+  InstanceType: m6i.large
   Ssh:
     KeyName: ${SSH_KEY_NAME}
   Networking:
-    SubnetId: ${SUBNET_ID}
+    SubnetId: subnet-xxxxxxxxxxx
   LocalStorage:
     RootVolume:
       Size: 50
+      VolumeType: gp3
   Dcv:
     Enabled: true
   Iam:
@@ -19,24 +20,25 @@ HeadNode:
 Scheduling:
   Scheduler: slurm
   SlurmQueues:
-    - Name: queue0
+    - Name: compute
       ComputeResources:
-        - Name: queue0-c5n18xlarge
+        - Name: compute
           MinCount: 0
           MaxCount: 2
-          InstanceType: c5n.18xlarge
+          InstanceType: c6i.16xlarge
           DisableSimultaneousMultithreading: true
           Efa:
-            Enabled: true
+            Enabled: false
       Networking:
         SubnetIds:
-          - ${SUBNET_ID}
+          - subnet-yyyyyyyyyy
         PlacementGroup:
           Enabled: true
       ComputeSettings:
         LocalStorage:
           RootVolume:
             Size: 50
+            VolumeType: gp3
       CustomActions:
         OnNodeConfigured:
           Script: s3://hpc-${AWS_ACCOUNT}-${AWS_REGION}-${USER_NAME}/container-install.sh
@@ -53,14 +55,16 @@ SharedStorage:
     StorageType: Ebs
     MountDir: /shared
     EbsSettings:
-      VolumeType: gp2
-      Size: '50'
+      Size: 50
+      VolumeType: gp3
       DeletionPolicy: Delete
   - Name: Fsx0
     StorageType: FsxLustre
-    MountDir: /lustre
+    MountDir: /fsx
     FsxLustreSettings:
       StorageCapacity: 1200
+      PerUnitStorageThroughput: 125
       ImportPath: s3://hpc-${AWS_ACCOUNT}-${AWS_REGION}-${USER_NAME}
-      DeploymentType: SCRATCH_2
+      DeploymentType: PERSISTENT_2
+      DataCompressionType: LZ4
       DeletionPolicy: Delete
