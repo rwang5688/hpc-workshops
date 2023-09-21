@@ -25,6 +25,9 @@ HeadNode:
   Dcv:
     Enabled: true
   Iam:
+    AdditionalIamPolicies:
+      - Policy: arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+      - Policy: arn:aws:iam::aws:policy/AmazonS3FullAccess
     S3Access:
       - EnableWriteAccess: true
         BucketName: '*'
@@ -41,9 +44,8 @@ Scheduling:
           Efa:
             Enabled: true
       Iam:
-        S3Access:
-          - EnableWriteAccess: true
-            BucketName: '*'
+        AdditionalIamPolicies:
+          - Policy: arn:aws:iam::aws:policy/AmazonS3FullAccess
       Networking:
         SubnetIds:
           - subnet-yyyyyyyyyy
@@ -59,9 +61,8 @@ Scheduling:
           Efa:
             Enabled: false
       Iam:
-        S3Access:
-          - EnableWriteAccess: true
-            BucketName: '*'
+        AdditionalIamPolicies:
+          - Policy: arn:aws:iam::aws:policy/AmazonS3FullAccess
       Networking:
         SubnetIds:
           - subnet-yyyyyyyyyy

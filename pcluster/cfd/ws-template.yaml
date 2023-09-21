@@ -12,9 +12,7 @@ HeadNode:
   Iam:
     AdditionalIamPolicies:
       - Policy: arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
-    S3Access:
-      - EnableWriteAccess: true
-        BucketName: '*'
+      - Policy: arn:aws:iam::aws:policy/AmazonS3FullAccess
 Scheduling:
   Scheduler: slurm
   SlurmQueues:
@@ -29,6 +27,9 @@ Scheduling:
           Efa:
             Enabled: false
             GdrSupport: false
+      Iam:
+        AdditionalIamPolicies:
+          - Policy: arn:aws:iam::aws:policy/AmazonS3FullAccess
       Networking:
         SubnetIds:
           - subnet-03bcdd367f58e0dc0
