@@ -1,10 +1,14 @@
-Region: eu-west-1
+Region: us-east-2
 Image:
   Os: alinux2
 SharedStorage:
   - MountDir: /shared
     Name: default-ebs
     StorageType: Ebs
+    EbsSettings:
+      VolumeType: gp3
+      DeletionPolicy: Delete
+      Size: '100'
   - Name: fsxshared
     StorageType: FsxLustre
     MountDir: /fsx
@@ -13,24 +17,29 @@ SharedStorage:
       DeploymentType: PERSISTENT_1
       StorageType: SSD
       AutomaticBackupRetentionDays: 30
-      DailyAutomaticBackupStartTime: 00:00
+      DailyAutomaticBackupStartTime: '00:00'
       PerUnitStorageThroughput: 100
+      DeletionPolicy: Delete
 HeadNode:
-  InstanceType: m6g.large
+  InstanceType: m6g.xlarge
   Networking:
     SubnetId: subnet-xxxxxxxxxxx
     ElasticIp: false
   Ssh:
-    KeyName: cfd_ireland
+    KeyName: your-key-name
   Dcv:
     Enabled: true
+    AllowedIps: 0.0.0.0/0
   Iam:
     AdditionalIamPolicies:
       - Policy: arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
       - Policy: arn:aws:iam::aws:policy/AmazonS3FullAccess
-    S3Access:
-      - EnableWriteAccess: true
-        BucketName: '*'
+  Imds:
+    Secured: true
+  LocalStorage:
+    RootVolume:
+      VolumeType: gp3
+      Size: 100
 Scheduling:
   Scheduler: slurm
   SlurmQueues:
@@ -38,11 +47,14 @@ Scheduling:
       CapacityType: ONDEMAND
       ComputeResources:
         - Name: defaultcompute
-          InstanceType: c6gn.16xlarge
           MinCount: 0
           MaxCount: 10
           Efa:
             Enabled: true
+            GdrSupport: true
+          Instances:
+            - InstanceType: c6gn.16xlarge
+          DisableSimultaneousMultithreading: true
       Iam:
         AdditionalIamPolicies:
           - Policy: arn:aws:iam::aws:policy/AmazonS3FullAccess
@@ -51,15 +63,23 @@ Scheduling:
           - subnet-yyyyyyyyyy
         PlacementGroup:
           Enabled: true
+      ComputeSettings:
+        LocalStorage:
+          RootVolume:
+            VolumeType: gp3
+            Size: 50
+      AllocationStrategy: lowest-price
     - Name: mesh
       CapacityType: ONDEMAND
       ComputeResources:
         - Name: defaultmesh
-          InstanceType: r6g.16xlarge
           MinCount: 0
           MaxCount: 10
           Efa:
             Enabled: false
+          Instances:
+            - InstanceType: r6g.16xlarge
+          DisableSimultaneousMultithreading: true
       Iam:
         AdditionalIamPolicies:
           - Policy: arn:aws:iam::aws:policy/AmazonS3FullAccess
@@ -68,3 +88,11 @@ Scheduling:
           - subnet-yyyyyyyyyy
         PlacementGroup:
           Enabled: true
+      ComputeSettings:
+        LocalStorage:
+          RootVolume:
+            VolumeType: gp3
+            Size: 50
+  SlurmSettings: {}
+Imds:
+  ImdsSupport: v2.0

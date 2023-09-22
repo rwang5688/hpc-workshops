@@ -10,6 +10,7 @@ HeadNode:
       VolumeType: gp3
   Dcv:
     Enabled: true
+    AllowedIps: 0.0.0.0/0
   Iam:
     AdditionalIamPolicies:
       - Policy: arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
@@ -25,10 +26,11 @@ Scheduling:
         - Name: compute
           MinCount: 0
           MaxCount: 2
-          InstanceType: p3.16xlarge
           DisableSimultaneousMultithreading: true
           Efa:
             Enabled: false
+          Instances:
+            - InstanceType: p3.16xlarge
       Networking:
         SubnetIds:
           - subnet-yyyyyyyyyy
@@ -46,6 +48,8 @@ Scheduling:
         AdditionalIamPolicies:
           - Policy: arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
           - Policy: arn:aws:iam::aws:policy/AmazonS3FullAccess
+      AllocationStrategy: lowest-price
+  SlurmSettings: {}
 Region: ${AWS_REGION}
 Image:
   Os: ubuntu2004
@@ -64,7 +68,9 @@ SharedStorage:
     FsxLustreSettings:
       StorageCapacity: 1200
       PerUnitStorageThroughput: 125
-      ImportPath: s3://hpc-${AWS_ACCOUNT}-${AWS_REGION}-${USER_NAME}
+#      ImportPath: s3://hpc-${AWS_ACCOUNT}-${AWS_REGION}-${USER_NAME}
       DeploymentType: PERSISTENT_2
       DataCompressionType: LZ4
       DeletionPolicy: Delete
+Imds:
+  ImdsSupport: v2.0
