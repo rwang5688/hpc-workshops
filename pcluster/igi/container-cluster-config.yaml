@@ -49,7 +49,7 @@ Scheduling:
 Region: ${AWS_REGION}
 Image:
   Os: ubuntu2004
-#  CustomAmi: ${CUSTOM_AMI}
+  CustomAmi: ${CUSTOM_AMI}
 SharedStorage:
   - Name: Ebs0
     StorageType: Ebs
