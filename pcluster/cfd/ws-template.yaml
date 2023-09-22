@@ -1,18 +1,22 @@
 HeadNode:
   InstanceType: m6i.large
   Networking:
-    SubnetId: subnet-03bcdd367f58e0dc0
+    SubnetId: subnet-xxxxxxxxxxx
   LocalStorage:
     RootVolume:
       VolumeType: gp3
+      Size: 100
   Ssh:
-    KeyName: cfd_ireland
+    KeyName: your-key-name
   Dcv:
     Enabled: true
+    AllowedIps: 0.0.0.0/0
   Iam:
     AdditionalIamPolicies:
       - Policy: arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
       - Policy: arn:aws:iam::aws:policy/AmazonS3FullAccess
+  Imds:
+    Secured: true
 Scheduling:
   Scheduler: slurm
   SlurmQueues:
@@ -23,22 +27,25 @@ Scheduling:
           Instances:
             - InstanceType: c6i.16xlarge
           MinCount: 0
-          MaxCount: 4
+          MaxCount: 10
           Efa:
             Enabled: false
             GdrSupport: false
+          DisableSimultaneousMultithreading: true
       Iam:
         AdditionalIamPolicies:
           - Policy: arn:aws:iam::aws:policy/AmazonS3FullAccess
       Networking:
         SubnetIds:
-          - subnet-03bcdd367f58e0dc0
+          - subnet-yyyyyyyyyy
         PlacementGroup:
           Enabled: true
       ComputeSettings:
         LocalStorage:
           RootVolume:
             VolumeType: gp3
+            Size: 50
+  SlurmSettings: {}
 Region: us-east-2
 Imds:
   ImdsSupport: v2.0
@@ -53,3 +60,4 @@ SharedStorage:
       PerUnitStorageThroughput: 125
       DeploymentType: PERSISTENT_2
       DataCompressionType: LZ4
+      DeletionPolicy: Delete
