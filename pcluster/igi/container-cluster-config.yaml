@@ -6,7 +6,7 @@ HeadNode:
     SubnetId: subnet-xxxxxxxxxxx
   LocalStorage:
     RootVolume:
-      Size: 100
+      Size: 200
       VolumeType: gp3
   Dcv:
     Enabled: true
@@ -39,7 +39,7 @@ Scheduling:
       ComputeSettings:
         LocalStorage:
           RootVolume:
-            Size: 100
+            Size: 200
             VolumeType: gp3
       CustomActions:
         OnNodeConfigured:
@@ -59,7 +59,7 @@ SharedStorage:
     StorageType: Ebs
     MountDir: /shared
     EbsSettings:
-      Size: 100
+      Size: 200
       VolumeType: gp3
       DeletionPolicy: Delete
   - Name: Fsx0

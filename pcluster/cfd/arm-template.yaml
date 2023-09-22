@@ -93,6 +93,7 @@ Scheduling:
           RootVolume:
             VolumeType: gp3
             Size: 50
+      AllocationStrategy: lowest-price
   SlurmSettings: {}
 Imds:
   ImdsSupport: v2.0
