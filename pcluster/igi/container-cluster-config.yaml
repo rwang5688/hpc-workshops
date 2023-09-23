@@ -6,7 +6,7 @@ HeadNode:
     SubnetId: subnet-xxxxxxxxxxx
   LocalStorage:
     RootVolume:
-      Size: 200
+      Size: 256
       VolumeType: gp3
   Dcv:
     Enabled: true
@@ -39,7 +39,7 @@ Scheduling:
       ComputeSettings:
         LocalStorage:
           RootVolume:
-            Size: 200
+            Size: 1024
             VolumeType: gp3
       CustomActions:
         OnNodeConfigured:
@@ -55,13 +55,6 @@ Image:
   Os: ubuntu2004
   CustomAmi: ${CUSTOM_AMI}
 SharedStorage:
-  - Name: Ebs0
-    StorageType: Ebs
-    MountDir: /shared
-    EbsSettings:
-      Size: 200
-      VolumeType: gp3
-      DeletionPolicy: Delete
   - Name: Fsx0
     StorageType: FsxLustre
     MountDir: /fsx
