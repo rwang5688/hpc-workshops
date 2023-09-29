@@ -89,10 +89,10 @@ Mappings:
       InstanceType: t2.medium
     Windows-NVIDIA-Graphics-Intensive:
       Name: /aws/service/marketplace/prod-qlg4bqqdecwn4/latest
-      InstanceType: g4dn.xlarge
+      InstanceType: g5.xlarge
     Windows-NVIDIA-Gaming:
       Name: /aws/service/marketplace/prod-3jsztnviatfky/latest
-      InstanceType: g4dn.xlarge
+      InstanceType: g5.xlarge
     Windows-AMD-Graphics-Intensive:
       Name: /aws/service/marketplace/prod-gdus6m3fb5s5c/latest
       InstanceType: g4ad.xlarge
@@ -101,7 +101,7 @@ Mappings:
       InstanceType: t2.medium
     AmazonLinux2-x64-Graphics-Intensive:
       Name: /aws/service/marketplace/prod-copiwia5b4a2c/latest
-      InstanceType: g4dn.xlarge
+      InstanceType: g5.xlarge
     AmazonLinux2-ARM:
       Name: /aws/service/marketplace/prod-5cck6e3zgohpy/latest
       InstanceType: m6g.xlarge

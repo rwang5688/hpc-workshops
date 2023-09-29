@@ -1,21 +1,21 @@
 HeadNode:
-  InstanceType: g4dn.xlarge
+  InstanceType: g5.xlarge
   Ssh:
-    KeyName: ${SSH_KEY_NAME}
+    KeyName: ec2-key-pair
   Networking:
     SubnetId: subnet-xxxxxxxxxxx
   LocalStorage:
     RootVolume:
       Size: 256
       VolumeType: gp3
+      Encrypted: true
   Dcv:
     Enabled: true
     AllowedIps: 0.0.0.0/0
   Iam:
     AdditionalIamPolicies:
-      - Policy: arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
-      - Policy: arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
       - Policy: arn:aws:iam::aws:policy/AmazonS3FullAccess
+      - Policy: arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
   Imds:
     Secured: true
 Scheduling:
@@ -41,19 +41,16 @@ Scheduling:
           RootVolume:
             Size: 1024
             VolumeType: gp3
-      CustomActions:
-        OnNodeConfigured:
-          Script: s3://hpc-${AWS_ACCOUNT}-${AWS_REGION}-${USER_NAME}/container-install.sh
+            Encrypted: true
       Iam:
         AdditionalIamPolicies:
-          - Policy: arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
           - Policy: arn:aws:iam::aws:policy/AmazonS3FullAccess
       AllocationStrategy: lowest-price
   SlurmSettings: {}
-Region: ${AWS_REGION}
+Region: us-west-2
 Image:
   Os: ubuntu2004
-  CustomAmi: ${CUSTOM_AMI}
+  CustomAmi: ami-zzzzzzzzzz
 SharedStorage:
   - Name: Fsx0
     StorageType: FsxLustre
@@ -61,7 +58,6 @@ SharedStorage:
     FsxLustreSettings:
       StorageCapacity: 1200
       PerUnitStorageThroughput: 125
-#      ImportPath: s3://hpc-${AWS_ACCOUNT}-${AWS_REGION}-${USER_NAME}
       DeploymentType: PERSISTENT_2
       DataCompressionType: LZ4
       DeletionPolicy: Delete
