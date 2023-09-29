@@ -1,0 +1,70 @@
+HeadNode:
+  InstanceType: g5.xlarge
+  Ssh:
+    KeyName: ec2-key-pair
+  Networking:
+    SubnetId: subnet-xxxxxxxxxxx
+  LocalStorage:
+    RootVolume:
+      Size: 256
+      VolumeType: gp3
+      Encrypted: true
+  Dcv:
+    Enabled: true
+    AllowedIps: 0.0.0.0/0
+  Iam:
+    AdditionalIamPolicies:
+      - Policy: arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
+      - Policy: arn:aws:iam::aws:policy/AmazonS3FullAccess
+      - Policy: arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+  Imds:
+    Secured: true
+Scheduling:
+  Scheduler: slurm
+  SlurmQueues:
+    - Name: compute
+      ComputeResources:
+        - Name: compute
+          MinCount: 0
+          MaxCount: 2
+          DisableSimultaneousMultithreading: true
+          Efa:
+            Enabled: false
+          Instances:
+            - InstanceType: p3.16xlarge
+      Networking:
+        SubnetIds:
+          - subnet-yyyyyyyyyy
+        PlacementGroup:
+          Enabled: true
+      ComputeSettings:
+        LocalStorage:
+          RootVolume:
+            Size: 1024
+            VolumeType: gp3
+            Encrypted: true
+      CustomActions:
+        OnNodeConfigured:
+          Script: s3://hpc-123456789012-us-west-2-username/on-node-configured-install.sh
+      Iam:
+        AdditionalIamPolicies:
+          - Policy: arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
+          - Policy: arn:aws:iam::aws:policy/AmazonS3FullAccess
+      AllocationStrategy: lowest-price
+  SlurmSettings: {}
+Region: us-west-2
+Image:
+  Os: ubuntu2004
+  CustomAmi: ami-zzzzzzzzzz
+SharedStorage:
+  - Name: Fsx0
+    StorageType: FsxLustre
+    MountDir: /fsx
+    FsxLustreSettings:
+      StorageCapacity: 1200
+      PerUnitStorageThroughput: 125
+      DeploymentType: PERSISTENT_2
+      DataCompressionType: LZ4
+      DeletionPolicy: Delete
+Imds:
+  ImdsSupport: v2.0
