@@ -6,7 +6,7 @@ HeadNode:
     SubnetId: subnet-xxxxxxxxxxx1234567
   LocalStorage:
     RootVolume:
-      Size: 1024
+      Size: 256
       VolumeType: gp3
       Encrypted: true
   Dcv:
