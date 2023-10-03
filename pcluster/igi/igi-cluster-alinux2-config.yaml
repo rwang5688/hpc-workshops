@@ -1,5 +1,5 @@
 HeadNode:
-  InstanceType: g5.xlarge
+  InstanceType: m6i.xlarge
   Ssh:
     KeyName: ec2-key-pair
   Networking:
