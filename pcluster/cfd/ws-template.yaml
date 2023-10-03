@@ -1,5 +1,5 @@
 HeadNode:
-  InstanceType: m6i.large
+  InstanceType: m6i.xlarge
   Networking:
     SubnetId: subnet-xxxxxxxxxxx
   LocalStorage:
