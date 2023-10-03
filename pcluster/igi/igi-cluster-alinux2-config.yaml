@@ -31,6 +31,8 @@ Scheduling:
             Enabled: false
           Instances:
             - InstanceType: p3.16xlarge
+      Image:
+        CustomAmi: ami-zzzzzzzzzz1234567
       Networking:
         SubnetIds:
           - subnet-yyyyyyyyyy1234567
@@ -53,7 +55,6 @@ Scheduling:
 Region: us-west-2
 Image:
   Os: alinux2
-  CustomAmi: ami-zzzzzzzzzz1234567
 SharedStorage:
   - Name: Fsx0
     StorageType: FsxLustre
