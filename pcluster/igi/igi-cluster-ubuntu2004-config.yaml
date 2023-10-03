@@ -6,7 +6,7 @@ HeadNode:
     SubnetId: subnet-xxxxxxxxxxx1234567
   LocalStorage:
     RootVolume:
-      Size: 256
+      Size: 1024
       VolumeType: gp3
       Encrypted: true
   Dcv:
@@ -65,5 +65,10 @@ SharedStorage:
       DeploymentType: PERSISTENT_2
       DataCompressionType: LZ4
       DeletionPolicy: Delete
+  - Name: FsxLustre1
+    StorageType: FsxLustre
+    MountDir: /fsx-ext
+    FsxLustreSettings:
+      FileSystemId: fs-zzzzzzzzzz1234567
 Imds:
   ImdsSupport: v2.0
