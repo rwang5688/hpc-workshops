@@ -61,6 +61,6 @@ Imds:
 SharedStorage:
   - Name: Efs0
     StorageType: Efs
-    MountDir: /shared
+    MountDir: /mnt/efs/fs1
     EfsSettings:
       FileSystemId: fs-zzzzzzzzzz1234567
