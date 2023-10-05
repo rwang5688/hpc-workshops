@@ -46,7 +46,8 @@ Scheduling:
             Encrypted: true
       CustomActions:
         OnNodeConfigured:
-          Script: s3://hpc-123456789012-us-west-2-username/on-node-configured-install.sh
+          Script: >-
+            s3://hpc-123456789012-us-west-2-username/on-node-configured-install.sh
       Iam:
         AdditionalIamPolicies:
           - Policy: arn:aws:iam::aws:policy/AmazonS3FullAccess
@@ -55,15 +56,11 @@ Scheduling:
 Region: us-west-2
 Image:
   Os: ubuntu2004
-SharedStorage:
-  - Name: Fsx0
-    StorageType: FsxLustre
-    MountDir: /fsx
-    FsxLustreSettings:
-      StorageCapacity: 1200
-      PerUnitStorageThroughput: 125
-      DeploymentType: PERSISTENT_2
-      DataCompressionType: LZ4
-      DeletionPolicy: Delete
 Imds:
   ImdsSupport: v2.0
+SharedStorage:
+  - Name: Efs0
+    StorageType: Efs
+    MountDir: /shared
+    EfsSettings:
+      FileSystemId: fs-zzzzzzzzzz1234567
