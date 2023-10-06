@@ -1,0 +1,3 @@
+Build:
+ InstanceType: g5.8xlarge
+ ParentImage: <UBUNTU2004_BASE_AMI_ID>
