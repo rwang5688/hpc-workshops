@@ -6,7 +6,7 @@ HeadNode:
     SubnetId: subnet-xxxxxxxxxxx1234567
   LocalStorage:
     RootVolume:
-      Size: 256
+      Size: 50
       VolumeType: gp3
       Encrypted: true
   Dcv:
@@ -46,7 +46,8 @@ Scheduling:
             Encrypted: true
       CustomActions:
         OnNodeConfigured:
-          Script: s3://hpc-123456789012-us-west-2-username/on-node-configured-install.sh
+          Script: >-
+            s3://hpc-123456789012-us-west-2-username/on-node-configured-install.sh
       Iam:
         AdditionalIamPolicies:
           - Policy: arn:aws:iam::aws:policy/AmazonS3FullAccess
@@ -55,6 +56,8 @@ Scheduling:
 Region: us-west-2
 Image:
   Os: ubuntu2004
+Imds:
+  ImdsSupport: v2.0
 SharedStorage:
   - Name: Fsx0
     StorageType: FsxLustre
@@ -70,5 +73,3 @@ SharedStorage:
     MountDir: /fsx-ext
     FsxLustreSettings:
       FileSystemId: fs-zzzzzzzzzz1234567
-Imds:
-  ImdsSupport: v2.0

@@ -6,7 +6,7 @@ HeadNode:
     SubnetId: subnet-xxxxxxxxxxx1234567
   LocalStorage:
     RootVolume:
-      Size: 256
+      Size: 50
       VolumeType: gp3
       Encrypted: true
   Dcv:
@@ -46,7 +46,8 @@ Scheduling:
             Encrypted: true
       CustomActions:
         OnNodeConfigured:
-          Script: s3://hpc-123456789012-us-west-2-username/on-node-configured-install.sh
+          Script: >-
+            s3://hpc-123456789012-us-west-2-username/on-node-configured-install.sh
       Iam:
         AdditionalIamPolicies:
           - Policy: arn:aws:iam::aws:policy/AmazonS3FullAccess
@@ -55,20 +56,11 @@ Scheduling:
 Region: us-west-2
 Image:
   Os: alinux2
-SharedStorage:
-  - Name: Fsx0
-    StorageType: FsxLustre
-    MountDir: /fsx
-    FsxLustreSettings:
-      StorageCapacity: 1200
-      PerUnitStorageThroughput: 125
-      DeploymentType: PERSISTENT_2
-      DataCompressionType: LZ4
-      DeletionPolicy: Delete
-  - Name: FsxLustre1
-    StorageType: FsxLustre
-    MountDir: /fsx-ext
-    FsxLustreSettings:
-      FileSystemId: fs-zzzzzzzzzz1234567
 Imds:
   ImdsSupport: v2.0
+SharedStorage:
+  - Name: hpc-efs
+    StorageType: Efs
+    MountDir: /mnt/efs/fs1
+    EfsSettings:
+      FileSystemId: fs-zzzzzzzzzz1234567

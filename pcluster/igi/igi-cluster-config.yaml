@@ -6,7 +6,7 @@ HeadNode:
     SubnetId: subnet-xxxxxxxxxxx1234567
   LocalStorage:
     RootVolume:
-      Size: 256
+      Size: 50
       VolumeType: gp3
       Encrypted: true
   Dcv:
@@ -59,7 +59,7 @@ Image:
 Imds:
   ImdsSupport: v2.0
 SharedStorage:
-  - Name: Efs0
+  - Name: hpc-efs
     StorageType: Efs
     MountDir: /mnt/efs/fs1
     EfsSettings:
