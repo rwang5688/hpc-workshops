@@ -86,7 +86,7 @@ Mappings:
   AmiMap:
     Windows:
       Name: /aws/service/marketplace/prod-v4tsgpxs5ulxw/latest
-      InstanceType: t2.medium
+      InstanceType: m6i.xlarge
     Windows-NVIDIA-Graphics-Intensive:
       Name: /aws/service/marketplace/prod-qlg4bqqdecwn4/latest
       InstanceType: g5.xlarge
@@ -98,7 +98,7 @@ Mappings:
       InstanceType: g4ad.xlarge
     AmazonLinux2-x64:
       Name: /aws/service/marketplace/prod-copiwia5b4a2c/latest
-      InstanceType: t2.medium
+      InstanceType: m6i.xlarge
     AmazonLinux2-x64-Graphics-Intensive:
       Name: /aws/service/marketplace/prod-copiwia5b4a2c/latest
       InstanceType: g5.xlarge
