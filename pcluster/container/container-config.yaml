@@ -1,0 +1,69 @@
+HeadNode:
+  InstanceType: m6i.2xlarge
+  Ssh:
+    KeyName: hpc-lab-key
+  Networking:
+    SubnetId: subnet-123456789
+  LocalStorage:
+    RootVolume:
+      Size: 50
+  Iam:
+    AdditionalIamPolicies:
+      - Policy: arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+      - Policy: arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
+  Dcv:
+    Enabled: true
+  Imds:
+    Secured: true
+Scheduling:
+  Scheduler: slurm
+  SlurmQueues:
+    - Name: queue0
+      ComputeResources:
+        - Name: queue0-c6in24xlarge
+          MinCount: 0
+          MaxCount: 2
+          InstanceType: c6in.24xlarge
+          DisableSimultaneousMultithreading: true
+          Efa:
+            Enabled: true
+            GdrSupport: true
+      Networking:
+        SubnetIds:
+          - subnet-123456789
+        PlacementGroup:
+          Enabled: true
+      ComputeSettings:
+        LocalStorage:
+          RootVolume:
+            Size: 50
+    - Name: queue1
+      ComputeResources:
+        - Name: queue1-c5xlarge
+          MinCount: 0
+          MaxCount: 8
+          InstanceType: c5.xlarge
+      Networking:
+        SubnetIds:
+          - subnet-123456789
+      CustomActions:
+        OnNodeConfigured:
+          Script: s3://bucket-name/on-node-configured.sh
+      Iam:
+        AdditionalIamPolicies:
+          - Policy: arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
+      ComputeSettings:
+        LocalStorage:
+          RootVolume:
+            Size: 50
+Region: us-west-2
+Image:
+  Os: alinux2
+SharedStorage:
+  - Name: Ebs0
+    StorageType: Ebs
+    MountDir: /shared
+    EbsSettings:
+      VolumeType: gp3
+      DeletionPolicy: Delete
+      Size: '50'
