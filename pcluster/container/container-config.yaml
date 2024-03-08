@@ -20,10 +20,10 @@ Scheduling:
   SlurmQueues:
     - Name: queue0
       ComputeResources:
-        - Name: queue0-c6in24xlarge
+        - Name: queue0-c6in32xlarge
           MinCount: 0
           MaxCount: 2
-          InstanceType: c6in.24xlarge
+          InstanceType: c6in.32xlarge
           DisableSimultaneousMultithreading: true
           Efa:
             Enabled: true
