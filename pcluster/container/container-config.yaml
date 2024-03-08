@@ -39,10 +39,10 @@ Scheduling:
             Size: 50
     - Name: queue1
       ComputeResources:
-        - Name: queue1-c5xlarge
+        - Name: queue1-c6ixlarge
           MinCount: 0
           MaxCount: 8
-          InstanceType: c5.xlarge
+          InstanceType: c6i.xlarge
       Networking:
         SubnetIds:
           - subnet-123456789
