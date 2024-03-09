@@ -3,7 +3,7 @@ HeadNode:
   Ssh:
     KeyName: hpc-lab-key
   Networking:
-    SubnetId: hpc-public1-subnet
+    SubnetId: hpc-subnet-public1
   LocalStorage:
     RootVolume:
       Size: 50
@@ -30,7 +30,7 @@ Scheduling:
             GdrSupport: true
       Networking:
         SubnetIds:
-          - hpc-private1-subnet
+          - hpc-subnet-private1
         PlacementGroup:
           Enabled: true
       ComputeSettings:
@@ -45,7 +45,7 @@ Scheduling:
           InstanceType: c6i.xlarge
       Networking:
         SubnetIds:
-          - hpc-private1-subnet
+          - hpc-subnet-private1
       CustomActions:
         OnNodeConfigured:
           Script: s3://bucket-name/scripts/on-node-configured.sh
