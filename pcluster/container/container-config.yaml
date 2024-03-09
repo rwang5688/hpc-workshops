@@ -48,7 +48,7 @@ Scheduling:
           - hpc-private1-subnet
       CustomActions:
         OnNodeConfigured:
-          Script: s3://bucket-name/on-node-configured.sh
+          Script: s3://bucket-name/scripts/on-node-configured.sh
       Iam:
         AdditionalIamPolicies:
           - Policy: arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
